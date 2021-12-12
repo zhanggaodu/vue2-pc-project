@@ -21,6 +21,16 @@ const routes = [
       return import(/* webpackChunkName: "about" */ '../views/Login.vue')
     }
   },
+  {
+    path: '/home',
+    name: 'Home',
+    component: function () {
+      return import(/* webpackChunkName: "about" */ '../views/system/index.vue')
+    },
+    meta: {
+      title: '主页'
+    }
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 
