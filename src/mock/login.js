@@ -1,8 +1,8 @@
 import http from '@/plugin/axios'
-export function fetchList(query) {
+export function fetchList (query) {
   return http({
-    url: '/vue-element-admin/article/list',
-    method: 'get',
+    url: '/vue-pc-project/login',
+    method: 'post',
     params: query
   })
 }
