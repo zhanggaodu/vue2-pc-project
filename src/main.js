@@ -11,7 +11,7 @@ import VueI18n from 'vue-i18n'
 import LangEnus from './lang/en-us'
 import LangZhcn from './lang/zh-cn'
 
-import { mockXHR } from '../mock'
+import { mockXHR } from './mock'
 
 Vue.use(VueI18n)
 
