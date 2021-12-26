@@ -44,7 +44,7 @@
             <a class="login-form-forgot" href="">
               Forgot password
             </a>
-            <a-button type="primary" html-type="submit" class="login-form-button">
+            <a-button  type="primary" html-type="submit" class="login-form-button">
               Log in
             </a-button>
             Or
@@ -84,6 +84,11 @@ export default {
       this.form.validateFields((err, values) => {
         if (!err) {
           console.log('Received values of form: ', values)
+          const params = { user: 'admin' }
+          this.$http.get(this.$api.LOGIN, params)
+            .then((resolve, reject) => {
+              console.log(resolve)
+            })
         }
       })
     }
