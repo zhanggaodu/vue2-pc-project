@@ -11,8 +11,13 @@ import VueI18n from 'vue-i18n'
 import LangEnus from './lang/en-us'
 import LangZhcn from './lang/zh-cn'
 
-import { mockXHR } from './mock'
+import http from './plugin/axios'
+import api from './api'
 
+// import { mockXHR } from './mock'
+Vue.prototype.$api = api
+
+Vue.prototype.$http = http
 Vue.use(VueI18n)
 
 const i18n = new VueI18n({
@@ -23,9 +28,7 @@ const i18n = new VueI18n({
   }
 }
 )
-if (process.env.NODE_ENV === 'production') {
-  mockXHR()
-}
+process.env.NODE_ENV !== 'production' && require('./mock/index') // 如果是线上环境则不加载
 
 Vue.config.productionTip = false
 

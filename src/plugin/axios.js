@@ -1,6 +1,7 @@
+import baseUrl from '@/lib/base_url'
 import axios from 'axios'
-const service = axios.create({
-  baseURL: process.env.BASE_API, // api 的 base_url
+const http = axios.create({
+  baseURL: baseUrl(), // process.env.BASE_API base_url api 的 'http://127.0.0.1:4523/mock/527017'
   timeout: 5000 // request timeout
 })
 
@@ -59,4 +60,4 @@ axios.interceptors.response.use(
   }
 )
 
-export default service
+export default http
