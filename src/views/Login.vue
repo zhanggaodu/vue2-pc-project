@@ -71,6 +71,8 @@
 
 <script>
 import { toSetLocalStroage } from '@/plugin/local-stroage.js'
+import { mapGetters } from 'vuex'
+// import { meun } from '@/mock/meun'
 const formItemLayout = {
   labelCol: { span: 2 },
   wrapperCol: { span: 24 }
@@ -91,6 +93,19 @@ export default {
       formTailLayout
     }
   },
+  computed: {
+    // 使用对象展开运算符将 getter 混入 computed 对象中
+    ...mapGetters([
+      'ifFirstOpen'
+    ])
+  },
+  watch: {
+    from () {
+      if (this.ifFirstOpen) {
+        this.from.userName = this.getName
+      }
+    }
+  },
   methods: {
     handleSubmit (e) {
       e.preventDefault()
@@ -102,6 +117,8 @@ export default {
               console.log(resolve)
               if (resolve.status === 200) {
                 toSetLocalStroage('user', values.userName)
+                this.$store.commit('changeOpenStatus', true)
+                this.$store.commit('changeName', values.userName)
                 this.$router.push({ path: '/' })
               }
             })

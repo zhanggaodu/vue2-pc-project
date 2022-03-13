@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import { toGetLocalStroage } from '@/plugin/local-stroage.js'
+import store from '@/store/index.js'
 
 Vue.use(VueRouter)
 
@@ -31,7 +31,30 @@ const routes = [
     meta: {
       title: '主页'
     }
+
+  }, {
+    path: '/echarts',
+    name: 'Echarts',
+    component: function () {
+      return import(/* webpackChunkName: "about" */ '../views/system/index.vue')
+    },
+    meta: [
+      { name: '项目分类', url: '/list' },
+      { name: '项目列表', url: '/type/list' },
+      { name: '详情' }
+    ]
   },
+  {
+    path: '/webgl',
+    name: 'Webgl',
+    component: function () {
+      return import(/* webpackChunkName: "about" */ '../views/system/index.vue')
+    },
+    meta: {
+      title: '可视化开发'
+    }
+  },
+
   { path: '*', redirect: '/404', hidden: true }
 ]
 
@@ -39,14 +62,11 @@ const router = new VueRouter({
   routes
 })
 router.beforeEach((to, from, next) => {
-  console.log(toGetLocalStroage('user'))
-  if (toGetLocalStroage('user') && from.path !== '/login') {
-    next({
-      path: '/login'
-    })
-  } else {
-    next()
+  console.log(to.meat)
+  if (to.name !== 'Login' && !store.getters.ifFirstOpen) {
+    next({ name: 'Login' })
   }
+  next()
 })
 
 export default router

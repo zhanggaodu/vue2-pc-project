@@ -1,12 +1,12 @@
 export function toSetLocalStroage (name, value) {
-  window.localStorage.setItem(name, value)
+  localStorage.setItem(name, value)
 }
 export function toGetLocalStroage (name) {
-  window.localStorage.getItem(name)
+  localStorage.getItem(name)
 }
 export function toRemoveLocalStroage (name) {
-  window.localStorage.removeItem(name)
+  localStorage.removeItem(name)
 }
 export function toClearLocalStroage () {
-  window.localStorage.clear()
+  localStorage.clear()
 }
