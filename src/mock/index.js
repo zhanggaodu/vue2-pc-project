@@ -16,7 +16,7 @@ function regUrl (url) {
 
 // 拦截接口，模拟接口数据
 Mock.mock(regUrl(api.LOGIN), /get|post/i, {
-  code: 0,
+  code: 200,
   msg: 'Mock接口模拟数据',
-  data: [1, 2, 3, 4, 5]
+  data: true
 })
