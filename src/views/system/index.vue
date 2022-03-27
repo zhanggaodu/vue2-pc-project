@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
   <a-layout id="components-layout-demo-top-side-2 full-screen">
     <a-layout-header class="header">
       <div class="logo" />
@@ -71,7 +70,6 @@
           <button @click="change">点击</button>
         </a-layout-content>
       </a-layout>
-=======
   <a-layout id="components-layout-demo-fixed-sider">
     <a-layout-sider
       :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }"
@@ -139,29 +137,20 @@
   </a-layout>
 </template>
 <script>
-<<<<<<< HEAD
+
 import mixin from '@/plugin/vue-extend.js'
-=======
 import { toClearLocalStroage } from '@/plugin/local-stroage'
 import { mapGetters } from 'vuex'
-import zhCN from '@/lang/zh-cn'
+// import zhCN from '@/lang/zh-cn'
 import { menu } from '@/mock/menu'
->>>>>>> zgd
+
 export default {
-  components: {},
   props: {},
   mixins: [mixin],
   data () {
     return {
-<<<<<<< HEAD
       home: this.$t('title1'),
       selfWatch: 1
-    }
-  },
-  computed: {
-    selfComputed: (vm) => {
-      console.log('执行computed')// 一进页面就会打印
-      return vm.home + ' is com'// 必须要有return 要不然页面不响应
     }
   },
   watch: {
@@ -172,26 +161,16 @@ export default {
     immediate: true,
     deep: true
   },
-
-  methods: {
-    change () {
-      this.home = 'gggg'
-      this.selfWatch = 2
-      this.mixin = '更改后的mixin'
-    },
-=======
-      home: 'title.home',
-      zhCN: zhCN,
-      menu: menu.home
-    }
-  },
   computed: {
+    selfComputed: (vm) => {
+      console.log('执行computed')// 一进页面就会打印
+      return vm.home + ' is com'// 必须要有return 要不然页面不响应
+    },
     ...mapGetters([
       'getName'
     ])
   },
   methods: {
->>>>>>> zgd
     onCollapse (collapsed, type) {
       console.log(collapsed, type)
     },
@@ -200,19 +179,12 @@ export default {
     },
     changeLocale (e) {
       const localeValue = e.target.value
-<<<<<<< HEAD
 
-      if (localeValue === 'ch') {
-        this.$i18n.locale = 'zh'
-      } else {
-        this.$i18n.locale = 'en'
-=======
       this.locale = localeValue
       if (!localeValue) {
         this.i18n.locale = 'en-us'
       } else {
         this.i18n.locale = 'zh-cn'
->>>>>>> zgd
       }
     },
     loginOut () {
@@ -229,24 +201,21 @@ export default {
   },
   created () {
   },
-<<<<<<< HEAD
-  mounted () { console.log(this.$t('title')) }
-=======
+
   mounted () {
     console.log(menu)
     console.log(this.$router)
   }
->>>>>>> zgd
+
 }
 </script>
 
 <style scoped lang="scss">
-<<<<<<< HEAD
 .full-screen {
   $fill-height: 100vh;
   height: $fill-height;
   overflow: auto;
-=======
+}
 .textAligin {
   text-align: center;
 }
@@ -256,6 +225,5 @@ export default {
   background: rgba(255, 255, 255, 0.2);
   margin: 16px 28px 16px 0;
   float: left;
->>>>>>> zgd
 }
 </style>
