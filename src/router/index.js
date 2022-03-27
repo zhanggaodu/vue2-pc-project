@@ -5,16 +5,6 @@ import store from '@/store/index.js'
 Vue.use(VueRouter)
 
 const routes = [
-  // {
-  //   path: '/about',
-  //   name: 'About',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: function () {
-  //     return import(/* webpackChunkName: "about" */ '../views/About.vue')
-  //   }
-  // }
   {
     path: '/login',
     name: 'Login',
@@ -23,8 +13,8 @@ const routes = [
     }
   },
   {
-    path: '/',
-    name: 'Home',
+    path: '/home',
+    // name: 'Home',
     component: function () {
       return import(/* webpackChunkName: "about" */ '../views/system/index.vue')
     },
@@ -33,22 +23,22 @@ const routes = [
     }
 
   }, {
-    path: '/echarts',
-    name: 'Echarts',
+    path: '/',
+    // name: 'echarts',echarts
     component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/system/index.vue')
+      return import(/* webpackChunkName: "about" */ '../views/echarts/index.vue')
     },
     meta: [
-      { name: '项目分类', url: '/list' },
-      { name: '项目列表', url: '/type/list' },
-      { name: '详情' }
+      // { name: '项目分类', url: '/list' },
+      // { name: '项目列表', url: '/type/list' },
+      // { name: '详情' }
     ]
   },
   {
     path: '/webgl',
-    name: 'Webgl',
+    // name: 'webgl',
     component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/system/index.vue')
+      return import(/* webpackChunkName: "about" */ '../views/webgl/index.vue')
     },
     meta: {
       title: '可视化开发'
@@ -60,6 +50,7 @@ const routes = [
 
 const router = new VueRouter({
   routes
+  // mode: 'history'
 })
 router.beforeEach((to, from, next) => {
   console.log(to.meat)

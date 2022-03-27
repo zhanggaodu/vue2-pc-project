@@ -82,6 +82,7 @@ const formTailLayout = {
   wrapperCol: { span: 19, offset: 4 }
 }
 export default {
+  name: 'login',
   data () {
     return {
       formLayout: 'horizontal',

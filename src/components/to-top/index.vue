@@ -4,6 +4,7 @@
 <script>
 
 export default {
+  name: 'totop',
   props: {},
   data () {
     return {
@@ -22,5 +23,9 @@ export default {
 }
 </script>
 
-<style lang='sass' scoped>
+<style scoped>
+button {
+  width: 100px;
+  height: 40px;
+}
 </style>

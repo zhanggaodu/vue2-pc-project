@@ -1,9 +1,10 @@
 <template>
-  <div></div>
+  <div>Webgl</div>
 </template>
 <script>
 
 export default {
+  name: 'webgl',
   components: {},
   props: {},
   data () {
