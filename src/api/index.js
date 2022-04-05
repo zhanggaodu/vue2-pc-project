@@ -1,4 +1,5 @@
 const api = {
-  LOGIN: 'api/login'
+  LOGIN: 'api/login',
+  UPDATE: '/update'
 }
 export default api

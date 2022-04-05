@@ -5,12 +5,12 @@
     >
       <div class="logo" />
       <a-menu theme="dark" mode="inline">
-        <!-- <a-menu-item v-for="item in menu.home" :key="item.path"> -->
-        <!-- <router-link v-if="item.path" :to="item.path">
+        <a-menu-item v-for="item in menu.home" :key="item.path">
+          <router-link v-if="item.path" :to="item.path">
             <a-icon type="user" />
             <span class="nav-text">{{ item.name }}</span>
-          </router-link> -->
-        <!-- </a-menu-item> -->
+          </router-link>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout :style="{ marginLeft: '200px' }">
@@ -42,22 +42,8 @@
         <div
           :style="{ padding: '24px', background: '#fff', textAlign: 'center' }"
         >
-          <roter-view></roter-view>
-          ...
-          <br />
-          Really
-          <br />...<br />...<br />...<br />
-          long
-          <br />...<br />...<br />...<br />...<br />...<br />...
-          <br />...<br />...<br />...<br />...<br />...<br />...
-          <br />...<br />...<br />...<br />...<br />...<br />...
-          <br />...<br />...<br />...<br />...<br />...<br />...
-          <br />...<br />...<br />...<br />...<br />...<br />...
-          <br />...<br />...<br />...<br />...<br />...<br />...
-          <br />...<br />...<br />...<br />...<br />...<br />
-          content
           <keep-alive>
-            <!-- <router-view /> -->
+            <router-view></router-view>
           </keep-alive>
           <totop></totop>
         </div>
@@ -78,7 +64,7 @@ import { menu } from '@/mock/menu'
 import totop from '@/components/to-top/index'
 
 export default {
-  // name: 'Home',
+  name: 'Home',
   components: { totop },
   mixins: [mixin],
   data () {
@@ -125,7 +111,7 @@ export default {
     },
     loginOut () {
       toClearLocalStroage()
-      // this.$router.push({ name: 'Login' })
+      this.$router.push({ name: 'Login' })
     },
     isDashboard (route) {
       const name = route && route.name

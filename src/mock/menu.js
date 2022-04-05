@@ -9,6 +9,11 @@ export const menu = {
       path: '/webgl',
       name: '可视化开发'
 
+    },
+    {
+      path: '/update',
+      name: '大文件上传'
+
     }
   ]
 }

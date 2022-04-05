@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import {
   DatePicker, Layout, Form, Input, Button, Checkbox, Menu, Icon,
-  ConfigProvider, Radio, message, Modal, Breadcrumb, Col, Row
+  ConfigProvider, Radio, message, Modal, Breadcrumb, Col, Row, Upload
 } from 'ant-design-vue'
 // Vue.component('DatePicker', DatePicker)
 Vue.use(DatePicker)
@@ -19,6 +19,7 @@ Vue.use(Modal)
 Vue.use(Breadcrumb)
 Vue.use(Col)
 Vue.use(Row)
+Vue.use(Upload)
 message.config({
   top: '500px',
   duration: 2,

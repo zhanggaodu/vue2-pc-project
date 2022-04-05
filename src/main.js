@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
+
 import router from './router'
 import store from './store'
 import './plugin/antd-desgin'
@@ -13,7 +14,6 @@ import VueI18n from 'vue-i18n'
 
 import http from './plugin/axios'
 import api from './api'
-
 Vue.prototype.$api = api
 
 Vue.prototype.$http = http
