@@ -13,7 +13,8 @@
   </div>
 </template>
 <script>
-import * as SparkMD5 from 'spark-md5'
+// worker-->indexdb
+// import * as SparkMD5 from 'spark-md5'
 export default {
   components: {},
   data () {
@@ -46,55 +47,62 @@ export default {
       // } else {
       this.currFile = info.file.originFileObj
       this.fileChunkList = info.fileList
-      const { fileHash } = await this.getFileChunk(info.file.originFileObj)
-      console.log(fileHash)
+      // const { fileHash } = await this.getFileChunk(info.file.originFileObj)console.log(fileHash)
+      const works = new Worker('@/works/getChunks.js')
+      works.postMessage(info.file.originFileObj)
+      works.onmessage = e => {
+        console.log(e)
+      }
+      // 秒传：上传文件之前先判断hash之前有没有 如果有的话就秒传
+      // 本地数据库存储的时候应该用LRU算法进行优化
+
       // }
       // const [file] = event.target.files
       // if (!file) return
       // this.currFile.value = file
       // this.fileChunkList.value = []
 
-      this.uploadChunks(fileHash)
+      // this.uploadChunks(fileHash)
     },
     // 获取文件分块
-    getFileChunk (file, chunkSize = this.DefualtChunkSize) {
-      const that = this
-      return new Promise((resovle) => {
-        const blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice
-        const chunks = Math.ceil(file.size / chunkSize)
-        let currentChunk = 0
-        const spark = new SparkMD5.ArrayBuffer()
-        const fileReader = new FileReader()
-        fileReader.onload = function (e) {
-          console.log('read chunk nr', currentChunk + 1, 'of')
-          const chunk = e.target.result
-          spark.append(chunk)
-          console.log('spark', spark, 'of')
-          currentChunk++
-          if (currentChunk < chunks) {
-            loadNext()
-          } else {
-            const fileHash = spark.end()
-            console.info('finished computed hash', fileHash)
-            resovle({ fileHash })
-          }
-        }
-        fileReader.onerror = function () {
-          console.warn('oops, something went wrong.')
-        }
-        function loadNext () {
-          const start = currentChunk * chunkSize
-          const end = ((start + chunkSize) >= file.size) ? file.size : start + chunkSize
-          const chunk = blobSlice.call(file, start, end)
-          console.log(chunk)
-          that.fileChunkList.push({ chunk, size: chunk.size, name: that.currFile.name })
-          fileReader.readAsArrayBuffer(chunk)
-        }
-        loadNext()
-      }, (rejectd) => {
+    // getFileChunk (file, chunkSize = this.DefualtChunkSize) {
+    //   const that = this
+    //   return new Promise((resovle) => {
+    //     const blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice
+    //     const chunks = Math.ceil(file.size / chunkSize)
+    //     let currentChunk = 0
+    //     const spark = new SparkMD5.ArrayBuffer()
+    //     const fileReader = new FileReader()
+    //     fileReader.onload = function (e) {
+    //       console.log('read chunk nr', currentChunk + 1, 'of')
+    //       const chunk = e.target.result
+    //       spark.append(chunk)
+    //       console.log('spark', spark, 'of')
+    //       currentChunk++
+    //       if (currentChunk < chunks) {
+    //         loadNext()
+    //       } else {
+    //         const fileHash = spark.end()
+    //         console.info('finished computed hash', fileHash)
+    //         resovle({ fileHash })
+    //       }
+    //     }
+    //     fileReader.onerror = function () {
+    //       console.warn('oops, something went wrong.')
+    //     }
+    //     function loadNext () {
+    //       const start = currentChunk * chunkSize
+    //       const end = ((start + chunkSize) >= file.size) ? file.size : start + chunkSize
+    //       const chunk = blobSlice.call(file, start, end)
+    //       console.log(chunk)
+    //       that.fileChunkList.push({ chunk, size: chunk.size, name: that.currFile.name })
+    //       fileReader.readAsArrayBuffer(chunk)
+    //     }
+    //     loadNext()
+    //   }, (rejectd) => {
 
-      })
-    },
+    //   })
+    // },
     // 上传请求
     uploadChunks (fileHash) {
       const requests = this.fileChunkList.value.map((item, index) => {
