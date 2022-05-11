@@ -4,12 +4,12 @@
       name="file"
       :multiple="true"
       :headers="headers"
-      @change="handleChange"
+      :before-upload="beforeUpload"
     >
-      <!-- action="https://localhost/update" -->
+      <!-- action="https://localhost/update"  @change="handleChange" -->
       <a-button> <a-icon type="upload" /> Click to Upload </a-button>
     </a-upload>
-    <h2>总进度：{{ totalPercentage }} %</h2>
+    <!-- <h2>总进度：{{ totalPercentage }} %</h2> -->
   </div>
 </template>
 <script>
@@ -29,80 +29,83 @@ export default {
     }
   },
   computed: { // 总进度条
-    totalPercentage: () => {
-      if (!this.fileChunkList.length) return 0
-      const loaded = this.fileChunkList.value
-        .map(item => item.size * item.percentage)
-        .reduce((curr, next) => curr + next)
-      return parseInt((loaded / this.currFile.value.size).toFixed(2))
+    // totalPercentage: () => {
+    //   if (!this.fileChunkList.length) return 0
+    //   const loaded = this.fileChunkList.value
+    //     .map(item => item.size * item.percentage)
+    //     .reduce((curr, next) => curr + next)
+    //   return parseInt((loaded / this.currFile.value.size).toFixed(2))
+    // }
+  },
+  mounted () {
+    // console.log(window.indexedDB)// IDBFactory{}
+    const request = window.indexedDB.open('MyTestDatabase')
+
+    // error: null
+    // onblocked: null
+    // onerror: null
+    // onsuccess: null
+    // onupgradeneeded: null
+    // readyState: "done"
+    // result: IDBDatabase {name: "MyTestDatabase", version: 1, objectStoreNames: DOMStringList, onabort: null, onclose: null, …}
+    // source: null
+    // transaction: null
+    request.onerror = function (event) {
+    }
+    request.onsuccess = function (event) {
+
+    }
+    // 创建或者删除对象存储空间
+    // https://developer.mozilla.org/zh-CN/docs/Web/API/IndexedDB_API/Using_IndexedDB#%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%B3%E9%97%AD%E8%AD%A6%E5%91%8A
+    request.onupgradeneeded = function (event) {
+      const customerData = [
+        { ssn: '444-44-4444', name: 'Bill', age: 35, email: 'bill@company.com' },
+        { ssn: '555-55-5555', name: 'Donna', age: 32, email: 'donna@home.org' }
+      ]
+      var db = event.target.result
+      // 建立一个对象仓库来存储我们客户的相关信息，我们选择 ssn 作为键路径（key path）
+      // 因为 ssn 可以保证是不重复的
+      var objectStore = db.createObjectStore('customers', { keyPath: 'ssn' })
+
+      // 建立一个索引来通过姓名来搜索客户。名字可能会重复，所以我们不能使用 unique 索引
+      objectStore.createIndex('name', 'name', { unique: false })
+
+      // 使用邮箱建立索引，我们向确保客户的邮箱不会重复，所以我们使用 unique 索引
+      objectStore.createIndex('email', 'email', { unique: true })
+
+      // 使用事务的 oncomplete 事件确保在插入数据前对象仓库已经创建完毕
+      objectStore.transaction.oncomplete = function (event) {
+        // 将数据保存到新创建的对象仓库
+        var customerObjectStore = db.transaction('customers', 'readwrite').objectStore('customers')
+        customerData.forEach(function (customer) {
+          customerObjectStore.add(customer)
+        })
+      }
     }
   },
-  mounted () { },
   methods: {
-    // 文件变化
-    async handleChange (info) {
+    beforeUpload (info) {
       console.log(info)
-      // if (info.file.status === 'error') {
-      //   // this.$message.error('This is an error message')
-      // } else {
-      this.currFile = info.file.originFileObj
-      this.fileChunkList = info.fileList
-      // const { fileHash } = await this.getFileChunk(info.file.originFileObj)console.log(fileHash)
+      this.currFile = info
+      // 文件分块并加密
+      // async异步接收数据
       const works = new Worker('@/works/getChunks.js')
-      works.postMessage(info.file.originFileObj)
+      console.log(works)
+      works.postMessage(this.currFile)
       works.onmessage = e => {
         console.log(e)
       }
+      works.onerror = e => { }
+      // 终止worker works.terminate()
+      return false
+
       // 秒传：上传文件之前先判断hash之前有没有 如果有的话就秒传
-      // 本地数据库存储的时候应该用LRU算法进行优化
-
-      // }
-      // const [file] = event.target.files
-      // if (!file) return
-      // this.currFile.value = file
-      // this.fileChunkList.value = []
-
-      // this.uploadChunks(fileHash)
+      // 断点重传：本地数据库存储的时候应该用LRU算法进行优化
     },
-    // 获取文件分块
-    // getFileChunk (file, chunkSize = this.DefualtChunkSize) {
-    //   const that = this
-    //   return new Promise((resovle) => {
-    //     const blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice
-    //     const chunks = Math.ceil(file.size / chunkSize)
-    //     let currentChunk = 0
-    //     const spark = new SparkMD5.ArrayBuffer()
-    //     const fileReader = new FileReader()
-    //     fileReader.onload = function (e) {
-    //       console.log('read chunk nr', currentChunk + 1, 'of')
-    //       const chunk = e.target.result
-    //       spark.append(chunk)
-    //       console.log('spark', spark, 'of')
-    //       currentChunk++
-    //       if (currentChunk < chunks) {
-    //         loadNext()
-    //       } else {
-    //         const fileHash = spark.end()
-    //         console.info('finished computed hash', fileHash)
-    //         resovle({ fileHash })
-    //       }
-    //     }
-    //     fileReader.onerror = function () {
-    //       console.warn('oops, something went wrong.')
-    //     }
-    //     function loadNext () {
-    //       const start = currentChunk * chunkSize
-    //       const end = ((start + chunkSize) >= file.size) ? file.size : start + chunkSize
-    //       const chunk = blobSlice.call(file, start, end)
-    //       console.log(chunk)
-    //       that.fileChunkList.push({ chunk, size: chunk.size, name: that.currFile.name })
-    //       fileReader.readAsArrayBuffer(chunk)
-    //     }
-    //     loadNext()
-    //   }, (rejectd) => {
-
-    //   })
-    // },
+    async handleChange (info) { // 文件变化
+      this.currFile = info.file.originFileObj
+      this.fileChunkList = info.fileList
+    },
     // 上传请求
     uploadChunks (fileHash) {
       const requests = this.fileChunkList.value.map((item, index) => {
