@@ -13,8 +13,8 @@
   </div>
 </template>
 <script>
-// worker-->indexdb
 // import * as SparkMD5 from 'spark-md5'
+import { InitIndexDB } from '@/plugin/indexdb.js'
 export default {
   components: {},
   data () {
@@ -38,50 +38,11 @@ export default {
     // }
   },
   mounted () {
-    // console.log(window.indexedDB)// IDBFactory{}
-    const request = window.indexedDB.open('MyTestDatabase')
+    const db = new InitIndexDB(this)
+    db.open()
 
-    // error: null
-    // onblocked: null
-    // onerror: null
-    // onsuccess: null
-    // onupgradeneeded: null
-    // readyState: "done"
-    // result: IDBDatabase {name: "MyTestDatabase", version: 1, objectStoreNames: DOMStringList, onabort: null, onclose: null, …}
-    // source: null
-    // transaction: null
-    request.onerror = function (event) {
-    }
-    request.onsuccess = function (event) {
-
-    }
-    // 创建或者删除对象存储空间
-    // https://developer.mozilla.org/zh-CN/docs/Web/API/IndexedDB_API/Using_IndexedDB#%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%B3%E9%97%AD%E8%AD%A6%E5%91%8A
-    request.onupgradeneeded = function (event) {
-      const customerData = [
-        { ssn: '444-44-4444', name: 'Bill', age: 35, email: 'bill@company.com' },
-        { ssn: '555-55-5555', name: 'Donna', age: 32, email: 'donna@home.org' }
-      ]
-      var db = event.target.result
-      // 建立一个对象仓库来存储我们客户的相关信息，我们选择 ssn 作为键路径（key path）
-      // 因为 ssn 可以保证是不重复的
-      var objectStore = db.createObjectStore('customers', { keyPath: 'ssn' })
-
-      // 建立一个索引来通过姓名来搜索客户。名字可能会重复，所以我们不能使用 unique 索引
-      objectStore.createIndex('name', 'name', { unique: false })
-
-      // 使用邮箱建立索引，我们向确保客户的邮箱不会重复，所以我们使用 unique 索引
-      objectStore.createIndex('email', 'email', { unique: true })
-
-      // 使用事务的 oncomplete 事件确保在插入数据前对象仓库已经创建完毕
-      objectStore.transaction.oncomplete = function (event) {
-        // 将数据保存到新创建的对象仓库
-        var customerObjectStore = db.transaction('customers', 'readwrite').objectStore('customers')
-        customerData.forEach(function (customer) {
-          customerObjectStore.add(customer)
-        })
-      }
-    }
+    db.init('FileData', 'id')
+    db.addData({ id: '242', name: 'ddd' })
   },
   methods: {
     beforeUpload (info) {
